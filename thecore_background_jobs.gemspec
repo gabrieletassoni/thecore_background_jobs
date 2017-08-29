@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "sqlite3"
   s.add_dependency 'thecore', '~> 1.1'
   s.add_dependency 'sidekiq', '~> 5.0'
+  s.add_dependency 'sidekiq-scheduler', '~> 2.1'
 end
