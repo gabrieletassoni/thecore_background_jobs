@@ -7,7 +7,6 @@ module ThecoreBackgroundJobAbilitiesConcern
     def thecore_background_jobs_abilities user
       # Not so good, but let's try
       RailsAdmin.config do |config|
-        config.navigation_static_label = I18n.t("admin.links.label")
         config.navigation_static_links = {
           "Sidekiq Dashboard" => "#{ENV['RAILS_RELATIVE_URL_ROOT']}/app/sidekiq"
         }
