@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'thecore', '~> 1.1'
   s.add_dependency 'sidekiq', '~> 5.0'
   s.add_dependency 'sidekiq-scheduler', '~> 2.1'
+  s.add_dependency 'sidekiq-failures', '~> 1.0'
 end
