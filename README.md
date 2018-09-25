@@ -25,7 +25,7 @@ The following script asks for the installation directory of the main Thecore App
     [Service]
     WorkingDirectory=$APPPATH
     Environment=SECRET_KEY_BASE=$(grep "SECRET_KEY_BASE" /etc/apache2/bancolini-confs/$APPNAME.conf|awk -F " " '{print $3}')
-    Environment=TRACKER_DATABASE_PASSWORD=$APPNAME
+    Environment=$(echo $APPNAME | awk '{print toupper($0)}')_DATABASE_PASSWORD=$APPNAME
     ExecStart=$BUNDLEBIN exec "sidekiq -e production" 
     User=${SUDO_USER:-$(whoami)}
     Type=simple
@@ -41,9 +41,6 @@ The following script asks for the installation directory of the main Thecore App
     WantedBy=multi-user.target
     EOM
 
-Change **WorkingDirectory** to the current app path and **ExecStart** to
-the sidekick used (usually a rvm path, comprised of gems)
-
 Then enable it:
 
     sudo systemctl enable sidekiq-$APPNAME
@@ -58,9 +55,7 @@ Now you can access the web ui, i.e.
 
 And you can manually test it in rails console:
 
-    RAILS_ENV=production rails c
-
-    ImportFromFtpWorker.perform_async
+    RAILS_ENV=production rails runner ImportFromFtpWorker.perform_async
 
 If you'd like to have the scheduled job run repeatedly, then add
 **config/sidekiq.yml** with content like:
