@@ -9,8 +9,7 @@ be installed:
 Sidekiq setup
 -------------
 
-Copy this into /lib/systemd/system/sidekiq-appname.service , change
-**appname** with the actual name of your app.
+The following script asks for the installation directory of the main Thecore App and from that it retrieves the needed information.
 
     echo "Please provide the path to the app:";read APPPATH
     APPNAME=$(basename "$APPPATH")
