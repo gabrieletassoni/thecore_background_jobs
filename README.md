@@ -54,7 +54,7 @@ and start:
 
 Now you can access the web ui, i.e.
 
-    https://www.taris.it/development/ast/app/sidekiq
+    https://yourtld/sidekiq
 
 And you can manually test it in rails console:
 
