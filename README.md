@@ -24,8 +24,6 @@ The following script asks for the installation directory of the main Thecore App
 
     [Service]
     WorkingDirectory=$APPPATH
-    Environment=SECRET_KEY_BASE=$(grep "SECRET_KEY_BASE" /etc/apache2/bancolini-confs/$APPNAME.conf|awk -F " " '{print $3}')
-    Environment=$(echo $APPNAME | awk '{print toupper($0)}')_DATABASE_PASSWORD=$APPNAME
     ExecStart=$BUNDLEBIN exec "sidekiq -e production" 
     User=${SUDO_USER:-$(whoami)}
     Type=simple
