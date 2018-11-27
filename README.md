@@ -58,7 +58,7 @@ And you can manually test it in rails console:
 If you'd like to have the scheduled job run repeatedly, then add
 **config/sidekiq.yml** with content like:
 
-    :schedule:
+    schedule:
       hello_world:
         cron: '0 * * * * *'   # Runs once per minute
         class: HelloWorld
