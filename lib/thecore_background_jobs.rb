@@ -1,5 +1,4 @@
-
-require 'thecore'
+require 'thecore_ui_rails_admin'
 require 'sidekiq'
 require "sidekiq-scheduler"
 require "sidekiq-failures"

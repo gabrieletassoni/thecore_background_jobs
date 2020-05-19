@@ -1,3 +1,3 @@
 module ThecoreBackgroundJobs
-  VERSION = '1.1.13'.freeze
+  VERSION = '2.0.0'.freeze
 end
