@@ -1,4 +1,4 @@
-require 'thecore_ui_rails_admin'
+require 'thecore_backend_commons'
 require 'sidekiq'
 require "sidekiq-scheduler"
 require "sidekiq-failures"

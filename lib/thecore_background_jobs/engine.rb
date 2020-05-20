@@ -1,4 +1,4 @@
-require 'thecore_ui_rails_admin'
+require 'thecore_backend_commons'
 module ThecoreBackgroundJobs
   class Engine < ::Rails::Engine
 
