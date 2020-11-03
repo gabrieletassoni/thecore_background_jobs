@@ -1,3 +1,3 @@
 module ThecoreBackgroundJobs
-  VERSION = '2.0.1'.freeze
+  VERSION = "#{`git describe --tags $(git rev-list --tags --max-count=1)`}"
 end
