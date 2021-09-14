@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   require 'sidekiq/web'
-  # Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
-  authenticate do
-    mount Sidekiq::Web, at: "/app/sidekiq"
+  
+  # Allow any authenticated User with admin capability
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
-  # mount Sidekiq::Web => '/sidekiq', :constraints => AdminConstraint.new
 end
