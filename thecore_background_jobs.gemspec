@@ -23,4 +23,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'sidekiq', '~> 6.0'
   s.add_dependency 'sidekiq-scheduler', '~> 3.0'
   s.add_dependency 'sidekiq-failures', '~> 1.0'
+  
 end
