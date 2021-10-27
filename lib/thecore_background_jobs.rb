@@ -1,4 +1,5 @@
 require 'thecore_backend_commons'
+require 'redis-namespace'
 require 'sidekiq'
 require "sidekiq-scheduler"
 require "sidekiq-failures"
