@@ -15,4 +15,46 @@ module ThecoreBackgroundJobs
     delivery_options.merge!({authentication: Settings.ns(:smtp).authentication}) unless Settings.ns(:smtp).authentication.blank? 
     delivery_options
   end
+
+  def self.update_cron_schedules
+    # {
+    #  "AlertForLongTermStockJob"=>{"cron"=>"0 0 9 * * *", "queue"=>"notset_default", "description"=>"This job Alerts a reference email for items in stock for too long", "enabled"=>true, "class"=>"AlertForLongTermStockJob"}, 
+    #  "ScheduleEmployeeReminderForInStockParcelsJob"=>{"cron"=>"0 0 8,14 * * *", "queue"=>"notset_default", "description"=>"This job checks periodically for new received parcels", "enabled"=>true, "class"=>"ScheduleEmployeeReminderForInStockParcelsJob"}
+    # }
+    Sidekiq.get_all_schedules.each_pair do |key, config|
+      puts "Key: #{key}, Config: #{config}"
+      schedule = "cron_for_#{key.underscore}"
+      setting = ThecoreSettings::Setting.where(ns: "schedules", key: schedule).pluck(:raw).first
+      puts "Setting is #{schedule} = #{setting}"
+      # Installing initial sidekiq.yml configuration if setting is not present
+      if setting.blank?
+        puts "Setting #{schedule} doesn't exist, creating based on current value: #{config["cron"]}"
+        ThecoreSettings::Setting.create(ns: "schedules", key: schedule, raw: config["cron"])
+        # Settings.ns("schedules").send("#{schedule}=", config["cron"])
+      elsif config["cron"].squeeze(" ").strip != setting.squeeze(" ").strip
+        # If we have a setting and is different from the currently loaded, then replace it 
+        # in scheduler configuration
+        puts "Setting #{schedule} exists: #{setting}"
+        begin
+          puts "Setting the schedule from DB value in Setting"
+          Sidekiq.set_schedule(key.underscore, { cron: setting.squeeze(" ").strip, queue: "#{ENV["COMPOSE_PROJECT_NAME"]}_default", class: key })
+          puts "Reloading schedules"
+          SidekiqScheduler::Scheduler.instance.reload_schedule!
+        rescue => exception
+          puts exception.message
+        end
+      end
+    end
+    # check_in_stock_parcels = ThecoreSettings::Setting.where(ns: "schedules", key: "cron_for_check_in_stock_parcels").pluck(:raw).first
+    # unless check_in_stock_parcels.blank?
+    #   begin
+    #     puts "Setting the schedule during initialization"
+    #     Sidekiq.set_schedule('check_in_stock_parcels', { cron: check_in_stock_parcels, queue: "#{ENV["COMPOSE_PROJECT_NAME"]}_default", class: 'ScheduleEmployeeReminderForInStockParcelsJob' })
+    #     puts "Reloading schedules during initialization"
+    #     SidekiqScheduler::Scheduler.instance.reload_schedule!
+    #   rescue => exception
+    #     puts exception.message
+    #   end
+    # end
+  end
 end
