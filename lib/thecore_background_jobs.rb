@@ -23,37 +23,37 @@ module ThecoreBackgroundJobs
     # }
     begin
       Sidekiq.get_all_schedules.each_pair do |key, config|
-        puts "Key: #{key}, Config: #{config}"
+        Rails.logger.info "Key: #{key}, Config: #{config}"
         schedule = "cron_for_#{key.underscore}"
         setting = ThecoreSettings::Setting.where(ns: "schedules", key: schedule).pluck(:raw).first
-        puts "Setting is #{schedule} = #{setting}"
+        Rails.logger.info "Setting is #{schedule} = #{setting}"
         # Installing initial sidekiq.yml configuration if setting is not present
         if setting.blank?
-          puts "Setting #{schedule} doesn't exist, creating based on current value: #{config["cron"]}"
+          Rails.logger.info "Setting #{schedule} doesn't exist, creating based on current value: #{config["cron"]}"
           ThecoreSettings::Setting.create(ns: "schedules", key: schedule, raw: config["cron"])
           # Settings.ns("schedules").send("#{schedule}=", config["cron"])
         elsif config["cron"].squeeze(" ").strip != setting.squeeze(" ").strip
           # If we have a setting and is different from the currently loaded, then replace it 
           # in scheduler configuration
-          puts "Setting #{schedule} exists: #{setting}"
+          Rails.logger.info "Setting #{schedule} exists: #{setting}"
           Sidekiq.set_schedule(key.underscore, { cron: setting.squeeze(" ").strip, queue: "#{ENV["COMPOSE_PROJECT_NAME"]}_default", class: key })
-          puts "Reloading schedules"
+          Rails.logger.info "Reloading schedules"
           SidekiqScheduler::Scheduler.instance.reload_schedule!
         end
       end 
     rescue => exception
-      puts "Thecore Background Jobs: REDIS not reachable:"
-      puts exception.message
+      Rails.logger.info "Thecore Background Jobs: REDIS not reachable:"
+      Rails.logger.info exception.message
     end
     # check_in_stock_parcels = ThecoreSettings::Setting.where(ns: "schedules", key: "cron_for_check_in_stock_parcels").pluck(:raw).first
     # unless check_in_stock_parcels.blank?
     #   begin
-    #     puts "Setting the schedule during initialization"
+    #     Rails.logger.info "Setting the schedule during initialization"
     #     Sidekiq.set_schedule('check_in_stock_parcels', { cron: check_in_stock_parcels, queue: "#{ENV["COMPOSE_PROJECT_NAME"]}_default", class: 'ScheduleEmployeeReminderForInStockParcelsJob' })
-    #     puts "Reloading schedules during initialization"
+    #     Rails.logger.info "Reloading schedules during initialization"
     #     SidekiqScheduler::Scheduler.instance.reload_schedule!
     #   rescue => exception
-    #     puts exception.message
+    #     Rails.logger.info exception.message
     #   end
     # end
   end
