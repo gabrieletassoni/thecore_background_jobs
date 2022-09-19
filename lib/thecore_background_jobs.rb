@@ -36,7 +36,7 @@ module ThecoreBackgroundJobs
           # If we have a setting and is different from the currently loaded, then replace it 
           # in scheduler configuration
           Rails.logger.info "Setting #{schedule} exists: #{setting}"
-          Sidekiq.set_schedule(key.underscore, { cron: setting.squeeze(" ").strip, queue: "#{ENV["COMPOSE_PROJECT_NAME"]}_default", class: key })
+          Sidekiq.set_schedule(key, { cron: setting.squeeze(" ").strip, queue: "#{ENV["COMPOSE_PROJECT_NAME"]}_default", class: key })
           Rails.logger.info "Reloading schedules"
           SidekiqScheduler::Scheduler.instance.reload_schedule!
         end
@@ -45,16 +45,5 @@ module ThecoreBackgroundJobs
       Rails.logger.info "Thecore Background Jobs: REDIS not reachable:"
       Rails.logger.info exception.message
     end
-    # check_in_stock_parcels = ThecoreSettings::Setting.where(ns: "schedules", key: "cron_for_check_in_stock_parcels").pluck(:raw).first
-    # unless check_in_stock_parcels.blank?
-    #   begin
-    #     Rails.logger.info "Setting the schedule during initialization"
-    #     Sidekiq.set_schedule('check_in_stock_parcels', { cron: check_in_stock_parcels, queue: "#{ENV["COMPOSE_PROJECT_NAME"]}_default", class: 'ScheduleEmployeeReminderForInStockParcelsJob' })
-    #     Rails.logger.info "Reloading schedules during initialization"
-    #     SidekiqScheduler::Scheduler.instance.reload_schedule!
-    #   rescue => exception
-    #     Rails.logger.info exception.message
-    #   end
-    # end
   end
 end
