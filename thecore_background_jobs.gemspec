@@ -19,10 +19,10 @@ Gem::Specification.new do |s|
   # s.add_dependency "rails", "~> 5.1.2"
 
   # s.add_development_dependency "sqlite3"
-  s.add_dependency 'thecore_backend_commons', '~> 2.4'
+  s.add_dependency 'thecore_backend_commons', '~> 3.0'
   s.add_dependency 'redis-namespace', '~> 1.8'
-  s.add_dependency 'sidekiq', '~> 6.0'
-  s.add_dependency 'sidekiq-scheduler', '~> 3.0'
+  s.add_dependency 'sidekiq', '~> 7.0'
+  s.add_dependency 'sidekiq-scheduler', '~> 4.0'
   s.add_dependency 'sidekiq-failures', '~> 1.0'
   
 end
