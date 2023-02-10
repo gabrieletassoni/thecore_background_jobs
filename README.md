@@ -1,64 +1,28 @@
-Dependencies
-------------
+# ThecoreBackgroundJobs
+Short description and motivation.
 
-This gem depends on tiny\_tds, which depends on some debian packages to
-be installed:
+## Usage
+How to use my plugin.
 
-    sudo apt install freetds-dev redis-server
+## Installation
+Add this line to your application's Gemfile:
 
-Sidekiq setup
--------------
+```ruby
+gem "thecore_background_jobs"
+```
 
-The following script asks for the installation directory of the main Thecore App and from that it retrieves the needed information.
+And then execute:
+```bash
+$ bundle
+```
 
-    echo "Please provide the path to the app:";read APPPATH
-    APPNAME=$(basename "$APPPATH")
-    CURDIR=$(pwd)
-    cd $APPPATH
-    BUNDLEBIN=$(which bundle)
-    cd $CURDIR
-    cat <<EOM | sudo tee "/lib/systemd/system/sidekiq-$APPNAME.service"
-    [Unit]
-    Description=sidekiq-$APPNAME
-    After=syslog.target network.target redis-server.service
+Or install it yourself as:
+```bash
+$ gem install thecore_background_jobs
+```
 
-    [Service]
-    WorkingDirectory=$APPPATH
-    ExecStart=$BUNDLEBIN exec "sidekiq -e production" 
-    User=${SUDO_USER:-$(whoami)}
-    Type=simple
-    RestartSec=1
-    Restart=on-failure
+## Contributing
+Contribution directions go here.
 
-    # output goes to /var/log/syslog
-    StandardOutput=syslog
-    StandardError=syslog
-    SyslogIdentifier=sidekiq-$APPNAME
-
-    [Install]
-    WantedBy=multi-user.target
-    EOM
-
-Then enable it:
-
-    sudo systemctl enable sidekiq-$APPNAME
-
-and start:
-
-    sudo service sidekiq-$APPNAME start
-
-Now you can access the web ui, i.e.
-
-    https://yourtld/sidekiq
-
-And you can manually test it in rails console:
-
-    RAILS_ENV=production rails runner ImportFromFtpWorker.perform_async
-
-If you'd like to have the scheduled job run repeatedly, then add
-**config/sidekiq.yml** with content like:
-
-    schedule:
-      hello_world:
-        cron: '0 * * * * *'   # Runs once per minute
-        class: HelloWorld
+## License
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

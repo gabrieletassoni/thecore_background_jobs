@@ -1,7 +1,7 @@
-require 'test_helper'
+require "test_helper"
 
-class ThecoreBackgroundJobs::Test < ActiveSupport::TestCase
-  test "truth" do
-    assert_kind_of Module, ThecoreBackgroundJobs
+class ThecoreBackgroundJobsTest < ActiveSupport::TestCase
+  test "it has a version number" do
+    assert ThecoreBackgroundJobs::VERSION
   end
 end
