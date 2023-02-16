@@ -1,3 +1,4 @@
+puts "Settings Concern from ThecoreBackgroundJobs"
 require 'active_support/concern'
 
 module ThecoreBackgroundSettingsConcern
