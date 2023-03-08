@@ -35,7 +35,7 @@ module ThecoreBackgroundJobs
           # If we have a setting and is different from the currently loaded, then replace it 
           # in scheduler configuration
           Rails.logger.info "Setting #{schedule} exists: #{setting}"
-          Sidekiq.set_schedule(key, { cron: setting.squeeze(" ").strip, queue: "#{ENV["COMPOSE_PROJECT_NAME"]}_default", class: key })
+          Sidekiq.set_schedule(key, { cron: setting.squeeze(" ").strip, queue: "#{ENV["COMPOSE_PROJECT_NAME"].presence || 'notset'}_default", class: key })
           Rails.logger.info "Reloading schedules"
           SidekiqScheduler::Scheduler.instance.reload_schedule!
         end
