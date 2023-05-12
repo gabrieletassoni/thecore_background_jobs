@@ -236,3 +236,4 @@ fabric.properties
 # *.ipr
 # End of https://www.gitignore.io/api/linux,osx,windows,rails,ruby,rubymine
 
+test/dummy/db/
