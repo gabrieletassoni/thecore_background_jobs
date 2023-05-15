@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Declare your gem's dependencies in thecore_background_jobs.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
+
 gemspec
 
 # Declare any dependencies that are still in development here instead of in
@@ -10,12 +13,11 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-# To use a debugger
-# gem 'byebug', group: [:development, :test]
-
-source 'https://www.taris.it/gems-repo' do
-  gem 'thecore', '~> 1.1'
+group :development do
+  gem 'rubocop'
+  gem 'solargraph'
 end
 
-gem 'sqlite3'
-gem 'sidekiq'
+group :test do
+  gem 'sqlite3'
+end
