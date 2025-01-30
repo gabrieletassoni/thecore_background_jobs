@@ -4,8 +4,6 @@ Rails.application.routes.draw do
     
     # Allow any authenticated User with admin capability
     authenticate :user, lambda { |u| u.admin? } do
-        scope ENV.fetch("RAILS_RELATIVE_URL_ROOT", "/") do
-           mount Sidekiq::Web => "/sidekiq"
-        end
+        mount Sidekiq::Web => "#{ENV.fetch('RAILS_RELATIVE_URL_ROOT', '/')}/sidekiq".gsub('//', '/')
     end
 end
